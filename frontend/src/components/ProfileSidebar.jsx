@@ -19,7 +19,7 @@ const ProfileSidebar = ({ activeSection, setActiveSection }) => {
 
         // Check if the profileImage is a relative path and construct the full URL
         const imageUrl = profileImage
-          ? `http://localhost:8000/${profileImage}`
+          ? `https://patient-management-system-kshy.onrender.com/${profileImage}`
           : "";
 
         setUserData({

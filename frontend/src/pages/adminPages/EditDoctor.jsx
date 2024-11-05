@@ -76,8 +76,8 @@ const EditDoctor = () => {
         });
 
         // Set preview images
-        setProfileImagePreview(`http://localhost:8000/${doctor.profileImage}`);
-        setSignatureImagePreview(`http://localhost:8000/${doctor.signatureImage}`);
+        setProfileImagePreview(`https://patient-management-system-kshy.onrender.com/${doctor.profileImage}`);
+        setSignatureImagePreview(`https://patient-management-system-kshy.onrender.com/${doctor.signatureImage}`);
 
         // Conditionally show hospital fields
         setShowHospitalFields(doctor.doctorDetails.workType === "Online" || doctor.doctorDetails.workType === "Both");
