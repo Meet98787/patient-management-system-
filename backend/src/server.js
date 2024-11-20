@@ -30,7 +30,7 @@ const PORT = Config.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
-  origin: ['https://patient-management-system-pink.vercel.app', 'http://localhost:3000'], // Allow frontend origin
+  origin: ['https://patient-management-system-pink.vercel.app', 'http://localhost:3000' ,'http://pms.sqinelli.in/'], // Allow frontend origin
   methods: ["GET", "POST", "PUT", "DELETE",'PATCH'],
   allowedHeaders: ["Authorization", "Content-Type"],
   credentials: true,
