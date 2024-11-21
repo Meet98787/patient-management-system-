@@ -86,9 +86,9 @@ const SelectTemplate = () => {
           <h2 className="text-xl font-semibold text-center mb-4">
             Preview of {selectedTemplate.name}
           </h2>
-          <div className="rounded-lg">
+          {/* <div className="rounded-lg">
             {selectedTemplate.component}
-          </div>
+          </div> */}
         </div>
       )}
     </div>

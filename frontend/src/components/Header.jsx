@@ -111,9 +111,9 @@ const Header = ({ activeMenu, onSearch }) => {
             </div>
           )}
 
-          <div className="relative rounded-full bg-gray-100 p-3">
+          {/* <div className="relative rounded-full bg-gray-100 p-3">
             <FaBell className="text-gray-700" />
-          </div>
+          </div> */}
 
           <Link to={`/${userRole}`} className="flex items-center space-x-2">
             <img
