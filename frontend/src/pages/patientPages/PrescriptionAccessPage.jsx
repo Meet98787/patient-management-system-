@@ -64,13 +64,13 @@ const PrescriptionAccessPage = () => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg m-6 h-full">
-      <div className="flex justify-between items-center mb-4">
+      {/* <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold">Prescription Access</h2>
         <button className="bg-customBlue text-white px-4 py-2 rounded flex items-center space-x-2">
           <FaCalendarAlt />
           <span>Date Range</span>
         </button>
-      </div>
+      </div> */}
 
       {/* Prescription Cards */}
       <div className="grid grid-cols-4 gap-4 overflow-y-auto custom-scroll">
