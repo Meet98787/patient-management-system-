@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import "../../DoctorMeetingConference.scss";
-import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
-import axios from 'axios'; // Axios for making HTTP requests
-import { useParams } from 'react-router-dom'; // To get appointment ID from the route
+import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const DoctorMeetingConference = () => {
-
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [roomID, setRoomID] = useState(null); // State for room ID
-  const [userName, setUserName] = useState('');
+  const [roomID, setRoomID] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(""); // Error state
   const sidebarRef = useRef(null);
-  const { appointmentId } = useParams(); // Assuming you're passing appointmentId in the URL
+  const { appointmentId } = useParams();
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
@@ -37,62 +38,84 @@ const DoctorMeetingConference = () => {
   // Fetch roomID from the backend using the appointment ID
   const fetchAppointmentDetails = async () => {
     try {
-      const response = await axios.get(`https://patient-management-system-kshy.onrender.com/api/appointments/${appointmentId}`); // Assuming you have a backend route to get appointment details
+      setLoading(true); // Start loading
+      const response = await axios.get(
+        `https://patient-management-system-kshy.onrender.com/api/appointments/${appointmentId}`
+      );
       const appointmentData = response.data.data;
-      console.log(appointmentData)
-      setRoomID(appointmentData.roomID); // Set the room ID from backend
-      setUserName(appointmentData.doctorName); // Set the user name (patient name or doctor name)
-    } catch (error) {
-      console.error("Error fetching appointment details:", error);
+
+      if (!appointmentData.roomID) {
+        throw new Error("Room ID is not available in the appointment data");
+      }
+
+      setRoomID(appointmentData.roomID);
+      setUserName(appointmentData.doctorName);
+    } catch (err) {
+      console.error("Error fetching appointment details:", err);
+      setError("Failed to fetch appointment details. Please try again.");
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   const initZegoCloudMeeting = async (element) => {
-    const appID = 1757979495;
-    const serverSecret = "04f46682ad34e9005b14d629441180e3";
-    const userID = Date.now().toString(); // Generating a unique user ID for each participant
+    try {
+      const appID = 1757979495;
+      const serverSecret = "04f46682ad34e9005b14d629441180e3";
+      const userID = Date.now().toString(); // Generate unique user ID
 
-    if (!roomID) {
-      console.error("Room ID is not available");
-      return;
-    }
+      if (!roomID) {
+        throw new Error("Room ID is not available");
+      }
 
-    // Generate the Zego kit token
-    const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
-    const zp = ZegoUIKitPrebuilt.create(kitToken);
+      // Generate the Zego kit token
+      const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+        appID,
+        serverSecret,
+        roomID,
+        userID,
+        userName
+      );
+      const zp = ZegoUIKitPrebuilt.create(kitToken);
 
-    zp.joinRoom({
-      container: element,
-      sharedLinks: [
-        {
-          name: 'Personal link',
-          url:
-           window.location.protocol + '//' + 
-           window.location.host + window.location.pathname +
-            '?roomID=' +
-            roomID,
+      zp.joinRoom({
+        container: element,
+        sharedLinks: [
+          {
+            name: "Personal link",
+            url:
+              window.location.protocol +
+              "//" +
+              window.location.host +
+              window.location.pathname +
+              "?roomID=" +
+              roomID,
+          },
+        ],
+        roomID: roomID,
+        userID: userID,
+        userName: userName,
+        scenario: {
+          mode: ZegoUIKitPrebuilt.OneONoneCall,
         },
-      ],
-      roomID: roomID,
-      userID: userID,
-      userName: userName,
-      scenario: {
-        mode: ZegoUIKitPrebuilt.OneONoneCall,
-      },
-      onUserAvatarSetter:(userList) => {
-        userList.forEach(user => {
+        onUserAvatarSetter: (userList) => {
+          userList.forEach((user) => {
             user.setUserAvatar("/assets/images/Avatar-2.png");
-        });
-      },
-    });
+          });
+        },
+      });
+    } catch (err) {
+      console.error("Error initializing Zego Cloud Meeting:", err);
+      setError("Failed to initialize the meeting. Please try again.");
+    }
   };
 
   useEffect(() => {
-    fetchAppointmentDetails(); // Fetch the appointment details when the component loads
+    fetchAppointmentDetails(); // Fetch the appointment details on load
   }, [appointmentId]);
 
   useEffect(() => {
-    const videoCallDiv = document.getElementById('video-call-container');
+    const videoCallDiv = document.getElementById("video-call-container");
     if (videoCallDiv && roomID) {
       initZegoCloudMeeting(videoCallDiv); // Initialize the meeting once room ID is available
     }
@@ -106,11 +129,21 @@ const DoctorMeetingConference = () => {
             Patient Meeting Conference
           </h4>
 
-          <div
-            id="video-call-container"
-            className="video-call-container"
-            style={{ width: '100%', height: '100vh', backgroundColor: '#718EBF' }}
-          ></div>
+          {loading ? (
+            <div className="loading-spinner">Loading...</div>
+          ) : error ? (
+            <div className="error-message">{error}</div>
+          ) : (
+            <div
+              id="video-call-container"
+              className="video-call-container"
+              style={{
+                width: "100%",
+                height: "100vh",
+                backgroundColor: "#718EBF",
+              }}
+            ></div>
+          )}
         </div>
       </div>
     </div>
