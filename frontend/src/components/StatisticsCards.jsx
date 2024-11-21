@@ -52,7 +52,7 @@ const StatisticsCards = () => {
       />
       <InfoCard
         icon={<EventAvailable className="text-green-600" />}
-        label="Today's Appointments"
+        label="Total Appointments"
         value={counts.appointments}
         iconBgColor="bg-green-100"
       />

@@ -7,29 +7,17 @@ const TestReports = () => {
 
   const reports = [
     {
-      doctor: "Dr. Marcus Philips",
-      date: "2 Jan, 2022",
+      doctor: "Dr. Ravi Patel",
+      date: "20 Nav, 2024",
       disease: "Viral Infection",
       test: "Pathology Test",
     },
     {
       doctor: "Dr. Ryan Carder",
-      date: "2 Jan, 2022",
+      date: "21 Nav, 2024",
       disease: "Allergies",
       test: "Pathology Test",
-    },
-    {
-      doctor: "Dr. Zaire Saris",
-      date: "2 Jan, 2022",
-      disease: "Viral Infection",
-      test: "Pathology Test",
-    },
-    {
-      doctor: "Dr. Jaxson Herwitz",
-      date: "2 Jan, 2022",
-      disease: "Allergies",
-      test: "Pathology Test",
-    },
+    }
   ];
 
   const handleViewAll = () => {
